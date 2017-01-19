@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "dev-server": "webpack-dev-server"
+    "start": "webpack-dev-server"
   },
   "author": "Jihwan Marc Kim",
   "license": "ISC",

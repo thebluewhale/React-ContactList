@@ -11,16 +11,7 @@ export default class Contact extends React.Component {
 		this.state = {
 			keyword: '',
 			selectedKey: -1,
-			contactData: [{
-				name: 'marc',
-				phone: '000-111-1111'
-			}, {
-				name: 'bobby',
-				phone: '000-222-2222'
-			}, {
-				name: 'chris',
-				phone: '000-333-3333'
-			}]
+			contactData: []
 		};
 
 		this.handleChange = this.handleChange.bind(this);
@@ -28,6 +19,22 @@ export default class Contact extends React.Component {
 		this.handleCreate = this.handleCreate.bind(this);
 		this.handleRemove = this.handleRemove.bind(this);
 		this.handleEdit = this.handleEdit.bind(this);
+	}
+
+	componentWillMount() {
+		const contactData = localStorage.contactData;
+
+		if(contactData) {
+			this.setState({
+				contactData: JSON.parse(contactData)
+			});
+		}
+	}
+
+	componentDidUpdate(prevProps, prevState) {
+		if(JSON.stringify(prevState.contactData) != JSON.stringify(this.state.contactData)) {
+			localStorage.contactData = JSON.stringify(this.state.contactData);
+		}
 	}
 
 	handleChange(e) {
@@ -80,12 +87,16 @@ export default class Contact extends React.Component {
 		};
 
 		return (
-			<div className='contact-body w3-teal'>
+			<div className='s3-container w3-card contact-body w3-teal'>
 				<div className='w3-container'>
 					<h1 className='w3-indigo w3-center'><b>Contacts</b></h1>
 				</div>
 				<div className='w3-container common-margin'>
-					<input className='w3-input' name='keyword' placeholder='Search' value={this.state.keyword} onChange={this.handleChange}/>
+					<input className='w3-input'
+						   name='keyword'
+						   placeholder='Search'
+						   value={this.state.keyword}
+						   onChange={this.handleChange}/>
 				</div>
 				<div className='w3-container common-margin'>
 					<ul className='w3-ul w3-card-4 w3-light-grey'>
@@ -96,8 +107,10 @@ export default class Contact extends React.Component {
 					</ul>
 				</div>
 				<div className='w3-container common-margin'>
-					<ContactDetails isSelected={this.state.selectedKey} selectedData={this.state.contactData[this.state.selectedKey]}
-									onRemove={this.handleRemove} onEdit={this.handleEdit}/>
+					<ContactDetails isSelected={this.state.selectedKey}
+									selectedData={this.state.contactData[this.state.selectedKey]}
+									onRemove={this.handleRemove}
+									onEdit={this.handleEdit}/>
 				</div>
 				<div className='w3-container common-margin'>
 					<ContactCreate onCreate={this.handleCreate}/>

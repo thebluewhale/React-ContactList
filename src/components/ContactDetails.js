@@ -65,8 +65,17 @@ export default class ContactDetails extends React.Component {
 
 		const edit = (
 			<div>
-				<input type="text" name="name" placeholder="name" value={this.state.name} onChange={this.handleChange}/>
-				<input type="text" name="phone" placeholder="phone" value={this.state.phone} onChange={this.handleChange} onKeyPress={this.handleKeyPress}/>
+				<label className='w3-label w3-text-dark-grey'>Name</label>
+				<input type="text" name="name"
+					   className='w3-input'
+					   value={this.state.name}
+					   onChange={this.handleChange}/>
+				<label className='w3-label w3-text-dark-grey'>Phone</label>
+				<input type="text" name="phone"
+					   className='w3-input'
+					   value={this.state.phone}
+					   onChange={this.handleChange}
+					   onKeyPress={this.handleKeyPress}/>
 			</div>
 		);
 

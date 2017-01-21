@@ -3,7 +3,11 @@ import React from 'react';
 export default class ContactInfo extends React.Component {
 	render () {
 		return (
-			<div onClick={this.props.onClick}> {this.props.contact.name} {this.props.contact.phone} </div>
+			<li className='w3-padding-16' onClick={this.props.onClick}>
+				<span className='w3-xlarge'>{this.props.contact.name}</span>
+				<br></br>
+				<span>{this.props.contact.phone}</span>
+			</li>
 		)
 	}
 }

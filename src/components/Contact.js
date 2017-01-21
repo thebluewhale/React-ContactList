@@ -1,6 +1,8 @@
 import React from 'react';
 import ContactInfo from './ContactInfo';
 import ContactDetails from './ContactDetails';
+import ContactCreate from './ContactCreate';
+import update from 'react-addons-update';
 
 export default class Contact extends React.Component {
 
@@ -23,6 +25,9 @@ export default class Contact extends React.Component {
 
 		this.handleChange = this.handleChange.bind(this);
 		this.handleClick = this.handleClick.bind(this);
+		this.handleCreate = this.handleCreate.bind(this);
+		this.handleRemove = this.handleRemove.bind(this);
+		this.handleEdit = this.handleEdit.bind(this);
 	}
 
 	handleChange(e) {
@@ -34,6 +39,32 @@ export default class Contact extends React.Component {
 	handleClick(key) {
 		this.setState({
 			selectedKey: key
+		});
+	}
+
+	handleCreate(contact) {
+		this.setState({
+			contactData: update(this.state.contactData, {$push: [contact]})
+		});
+	}
+
+	handleRemove() {
+		if(this.state.selectedKey < 0) {
+			return;
+		}
+
+		this.setState({
+			contactData: update(this.state.contactData, {$splice: [[this.state.selectedKey, 1]]}),
+			selectedKey: -1
+		});
+	}
+
+	handleEdit(name, phone) {
+		this.setState({
+			contactData: update(this.state.contactData, {[this.state.selectedKey]: {
+				name: {$set: name},
+				phone: {$set: phone}
+			}})
 		});
 	}
 
@@ -49,12 +80,28 @@ export default class Contact extends React.Component {
 		};
 
 		return (
-			<div>
-				<h1>Contacts</h1>
-				<input name='keyword' placeholder='Search' value={this.state.keyword} onChange={this.handleChange}/>
-				<div>{mapToComponents(this.state.contactData)}</div>
-				<ContactDetails isSelected={this.state.selectedKey}
-								selectedData={this.state.contactData[this.state.selectedKey]}/>
+			<div className='contact-body w3-teal'>
+				<div className='w3-container'>
+					<h1 className='w3-indigo w3-center'><b>Contacts</b></h1>
+				</div>
+				<div className='w3-container common-margin'>
+					<input className='w3-input' name='keyword' placeholder='Search' value={this.state.keyword} onChange={this.handleChange}/>
+				</div>
+				<div className='w3-container common-margin'>
+					<ul className='w3-ul w3-card-4 w3-light-grey'>
+						<div className='w3-container'>
+							<h2><b>Contact List</b></h2>
+						</div>
+						{mapToComponents(this.state.contactData)}
+					</ul>
+				</div>
+				<div className='w3-container common-margin'>
+					<ContactDetails isSelected={this.state.selectedKey} selectedData={this.state.contactData[this.state.selectedKey]}
+									onRemove={this.handleRemove} onEdit={this.handleEdit}/>
+				</div>
+				<div className='w3-container common-margin'>
+					<ContactCreate onCreate={this.handleCreate}/>
+				</div>
 			</div>
 		);
 	}
